@@ -8,17 +8,21 @@ def download_url():
     except FileExistsError: pass
     
     medias = get_medias()
+    
+    with open('medias/tweets.csv', 'w', newline='', encoding='utf-8') as file:
+        medias.output(file)
+    
     for i, media in enumerate(medias):
         media:dict
         format:str = ''
 
-        url:str = media.get('fullUrl')
+        url:str|None = media.get('fullUrl')
         if not url:
             bitrates_urls:dict[int, str] = {} # Get the video in HD!!!
 
-            for variant in media.get('variants'):
+            for variant in media['variants']:
                 if variant['contentType'] == 'video/mp4':
-                    bitrates_urls['bitrate'] = variant['url']
+                    bitrates_urls[int(variant['bitrate'])] = variant['url']
 
             url = bitrates_urls[max(bitrates_urls.keys())] 
             format = 'mp4'

@@ -8,4 +8,4 @@ Once you're done, query `SELECT * FROM tweets;` in the generated SQL Database.
 
 Copypaste the results in `input.json` in the wrapper's directory.
 
-Run `downloadmanager.py`.
+Run `downloadmanager.py`. 

@@ -1,7 +1,25 @@
-import json
+import json, csv
 
 class ImagesToDownload(list):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.output_csv = [['index', 'date', 'user', 'content', 'url']]
+
+    def add(self, tweet_details):
+        self.output_csv.append(
+            [
+                str(len(self)),
+                tweet_details['date'],
+                tweet_details['user']['username'],
+                tweet_details['content'],
+                tweet_details['url']
+            ]
+        )
+        self.extend(tweet_details['media'])
+    
+    def output(self, file):
+        writer = csv.writer(file, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+        writer.writerows(self.output_csv)
 
 js = None
 
@@ -17,6 +35,10 @@ def get_medias():
         tweet_details:dict = json.loads(tweet['tweet_json'])
 
         if tweet_details['media']:
-            images_to_download.extend(tweet_details['media'])
+            print(tweet_details)
+            images_to_download.add(tweet_details)
     
     return images_to_download
+
+if __name__ == '__main__':
+    print(get_medias().output_csv)
